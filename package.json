@@ -8,14 +8,24 @@
 		"preview": "astro build && wrangler dev",
 		"astro": "astro",
 		"deploy": "astro build && wrangler deploy",
-		"cf-typegen": "wrangler types"
+		"cf-typegen": "wrangler types",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write --unsafe .",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"test:all": "vitest run && playwright test"
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^12.6.12",
 		"astro": "^5.16.9"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.3.11",
+		"@playwright/test": "^1.57.0",
 		"@types/node": "^25.0.8",
+		"vitest": "^4.0.17",
 		"wrangler": "^4.59.1"
 	}
 }
