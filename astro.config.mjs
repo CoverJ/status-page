@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 
 import cloudflare from '@astrojs/cloudflare';
 
+import tailwindcss from '@tailwindcss/vite';
+
 // https://astro.build/config
 export default defineConfig({
   adapter: cloudflare({
@@ -11,5 +13,15 @@ export default defineConfig({
     },
 
     imageService: "cloudflare"
-  })
+  }),
+  vite: {
+    server: {
+      watch: {
+        usePolling: true
+      }
+    },
+
+    // @ts-expect-error
+    plugins: [tailwindcss()]
+  }
 });
