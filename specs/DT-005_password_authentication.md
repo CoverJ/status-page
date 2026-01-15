@@ -24,6 +24,14 @@ Implement secure password-based authentication.
 - DT-003: Database Schema - Auth & Subscribers
 - DT-004: Database Repository Layer
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-006: Magic Link Authentication
 - DT-007: Auth Middleware & Guards

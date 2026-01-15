@@ -24,6 +24,14 @@ Allow visitors to subscribe to status updates.
 - DT-003: Database Schema - Auth & Subscribers
 - DT-031: Email Service Integration
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-030: Subscriber Preferences & Unsubscribe
 - DT-022: Manual Subscriber Management

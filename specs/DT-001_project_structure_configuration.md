@@ -8,7 +8,7 @@ Set up the foundational project structure, TypeScript configuration, and develop
 
 ## Acceptance Criteria
 - [ ] TypeScript strict mode enabled
-- [ ] ESLint and Prettier configured
+- [ ] Biome configured for linting and formatting (`pnpm lint` and `pnpm lint:fix`)
 - [ ] Path aliases configured (`@/` for src)
 - [ ] Environment variable schema defined (using zod)
 - [ ] Development, staging, and production Cloudflare environments configured
@@ -20,6 +20,14 @@ Set up the foundational project structure, TypeScript configuration, and develop
 
 ## Dependencies
 None (foundational ticket)
+
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
 
 ## Related Tickets
 - DT-002: Database Schema - Core Entities

@@ -18,6 +18,19 @@ Create and use templates for faster incident creation.
 - Add `incident_templates` table
 - Starter templates: "Service Degradation", "Service Outage", "Scheduled Maintenance"
 
+## Implementation Notes
+- Use tailwindcss for all styling
+- Use shadcn UI components (Form, Select, Input, Textarea, Button, Card, Dialog)
+- Run `pnpm lint:fix` with biome for code formatting
+
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix` to fix linting issues with biome
+2. Run `pnpm run test:all` to execute unit and E2E tests
+3. Run `pnpm build` to verify the build succeeds
+4. Run `pnpm deploy` to deploy to Cloudflare
+5. Create a git commit with a descriptive message and push
+
 ## Dependencies
 - DT-002: Database Schema - Core Entities
 - DT-017: Create Incident Flow

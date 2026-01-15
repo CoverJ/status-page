@@ -21,6 +21,14 @@ Allow subscribers to manage their preferences.
 - DT-029: Subscriber Signup Flow
 - DT-031: Email Service Integration
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-032: Incident Notification Emails
 - DT-022: Manual Subscriber Management

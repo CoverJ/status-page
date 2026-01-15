@@ -22,6 +22,14 @@ Show current unresolved incidents on status page.
 - DT-024: Status Page Layout & Styling
 - DT-004: Database Repository Layer
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-025: Component Status Display
 - DT-027: Scheduled Maintenance Display

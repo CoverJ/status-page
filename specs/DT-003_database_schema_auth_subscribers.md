@@ -23,6 +23,14 @@ Define schema for authentication and subscriber management.
 - DT-001: Project Structure & Configuration
 - DT-002: Database Schema - Core Entities
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-004: Database Repository Layer
 - DT-005: Password Authentication

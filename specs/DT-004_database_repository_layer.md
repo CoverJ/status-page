@@ -25,6 +25,14 @@ Create type-safe repository functions for database operations.
 - DT-002: Database Schema - Core Entities
 - DT-003: Database Schema - Auth & Subscribers
 
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix`
+2. Run `pnpm run test:all`
+3. Run `pnpm build`
+4. Run `pnpm deploy`
+5. Commit and push changes
+
 ## Related Tickets
 - DT-005: Password Authentication
 - DT-012: Component List View

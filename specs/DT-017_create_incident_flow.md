@@ -19,6 +19,19 @@ Allow team members to create new incidents.
 - Use a transaction for incident + update creation
 - Datetime picker should respect page timezone
 
+## Implementation Notes
+- Use tailwindcss for all styling
+- Use shadcn UI components (Form, Select, Checkbox, DatePicker, Button, Card)
+- Run `pnpm lint:fix` with biome for code formatting
+
+## Testing/QA
+Follow the "wrap it up" process:
+1. Run `pnpm run lint:fix` to fix linting issues with biome
+2. Run `pnpm run test:all` to execute unit and E2E tests
+3. Run `pnpm build` to verify the build succeeds
+4. Run `pnpm deploy` to deploy to Cloudflare
+5. Create a git commit with a descriptive message and push
+
 ## Dependencies
 - DT-004: Database Repository Layer
 - DT-016: Incident List View
