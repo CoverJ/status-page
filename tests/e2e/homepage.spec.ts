@@ -12,11 +12,10 @@ test.describe("Homepage", () => {
 		await expect(heading).toBeVisible();
 	});
 
-	test("heading has Tailwind styling", async ({ page }) => {
+	test("displays shadcn button", async ({ page }) => {
 		await page.goto("/");
-		const heading = page.getByRole("heading", { name: "Status Page" });
-		await expect(heading).toHaveClass(/text-4xl/);
-		await expect(heading).toHaveClass(/font-bold/);
-		await expect(heading).toHaveClass(/text-blue-600/);
+		const button = page.getByRole("button", { name: "Get Started" });
+		await expect(button).toBeVisible();
+		await expect(button).toHaveAttribute("data-slot", "button");
 	});
 });

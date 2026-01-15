@@ -1,9 +1,11 @@
 ---
+import { Button } from "@/components/ui/button";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<main class="min-h-screen flex items-center justify-center">
-		<h1 class="text-4xl font-bold text-blue-600">Status Page</h1>
+	<main class="min-h-screen flex flex-col items-center justify-center gap-6">
+		<h1 class="text-4xl font-bold text-foreground">Status Page</h1>
+		<Button client:load>Get Started</Button>
 	</main>
 </Layout>
