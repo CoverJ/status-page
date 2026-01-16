@@ -2,11 +2,7 @@ import type { MiddlewareHandler } from "astro";
 import { createDb } from "./db/client";
 import { PageRepository } from "./db/repositories";
 import type { Page, Session, User } from "./db/types";
-import {
-	getSessionCookie,
-	refreshSession,
-	validateSession,
-} from "./lib/auth";
+import { getSessionCookie, refreshSession, validateSession } from "./lib/auth";
 
 /**
  * Reserved subdomains that cannot be used for status pages.
@@ -185,7 +181,9 @@ function createUnauthorizedApiResponse(): Response {
  * Create a redirect response to the login page.
  */
 function createLoginRedirect(returnUrl?: string): Response {
-	const loginUrl = returnUrl ? `/login?returnUrl=${encodeURIComponent(returnUrl)}` : "/login";
+	const loginUrl = returnUrl
+		? `/login?returnUrl=${encodeURIComponent(returnUrl)}`
+		: "/login";
 	return new Response(null, {
 		status: 302,
 		headers: { Location: loginUrl },
@@ -234,7 +232,8 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 	}
 
 	// Check if this route requires authentication
-	const requiresAuth = isDashboardRoute(pathname) || isProtectedApiRoute(pathname);
+	const requiresAuth =
+		isDashboardRoute(pathname) || isProtectedApiRoute(pathname);
 
 	if (requiresAuth) {
 		// Try to validate the session

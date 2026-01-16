@@ -3,12 +3,21 @@
  */
 
 export {
+	type AuthContext,
+	type AuthResult,
+	forbiddenResponse,
+	getCurrentUser,
+	hasPageAccess,
+	hasPageRole,
+	refreshSessionOnActivity,
+	unauthorizedResponse,
+} from "./guards";
+export {
 	hashPassword,
 	type PasswordValidationResult,
 	validatePasswordStrength,
 	verifyPassword,
 } from "./password";
-
 export {
 	clearSessionCookie,
 	createSession,
@@ -21,14 +30,3 @@ export {
 	setSessionCookie,
 	validateSession,
 } from "./session";
-
-export {
-	type AuthContext,
-	type AuthResult,
-	forbiddenResponse,
-	getCurrentUser,
-	hasPageAccess,
-	hasPageRole,
-	refreshSessionOnActivity,
-	unauthorizedResponse,
-} from "./guards";

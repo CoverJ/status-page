@@ -1,4 +1,6 @@
 ---
+import type { PageStatusIndicator } from "@/db/schema/constants";
+import { PAGE_STATUS_INDICATORS } from "@/db/schema/constants";
 /**
  * Status Page Preview/Demo
  *
@@ -12,8 +14,6 @@
  *   Example: /status-preview?status=minor
  */
 import StatusPageLayout from "@/layouts/StatusPageLayout.astro";
-import type { PageStatusIndicator } from "@/db/schema/constants";
-import { PAGE_STATUS_INDICATORS } from "@/db/schema/constants";
 
 // Get status from query param, default to "none" (operational)
 const url = new URL(Astro.request.url);
@@ -21,7 +21,7 @@ const statusParam = url.searchParams.get("status") || "none";
 
 // Validate status param
 const statusIndicator: PageStatusIndicator = PAGE_STATUS_INDICATORS.includes(
-	statusParam as PageStatusIndicator
+	statusParam as PageStatusIndicator,
 )
 	? (statusParam as PageStatusIndicator)
 	: "none";

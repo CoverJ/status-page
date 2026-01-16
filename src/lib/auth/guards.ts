@@ -6,11 +6,7 @@ import type { APIContext, AstroGlobal } from "astro";
 import { createDb, type Database } from "../../db/client";
 import { TeamMemberRepository } from "../../db/repositories";
 import type { Session, User } from "../../db/types";
-import {
-	getSessionCookie,
-	refreshSession,
-	validateSession,
-} from "./session";
+import { getSessionCookie, refreshSession, validateSession } from "./session";
 
 /**
  * Auth context containing the current user and session.
