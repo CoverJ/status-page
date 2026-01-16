@@ -1,0 +1,65 @@
+---
+/**
+ * Status page route for subdomain-based routing.
+ * This page is rendered when accessing {subdomain}.downtime.online
+ *
+ * Note: The subdomain routing is handled by middleware (src/middleware.ts)
+ * which resolves the Page data from the database.
+ */
+export const prerender = false;
+
+import StatusPageLayout from "@/layouts/StatusPageLayout.astro";
+import type { PageStatusIndicator } from "@/db/schema/constants";
+
+// Get the subdomain route info from middleware
+const subdomainRoute = Astro.locals.subdomainRoute;
+
+// This page should only be rendered for status-page routes
+// Redirect to 404 if not a valid status page
+if (subdomainRoute.type !== "status-page") {
+	return Astro.redirect("/404");
+}
+
+const { page } = subdomainRoute;
+const statusIndicator = (page.statusIndicator || "none") as PageStatusIndicator;
+---
+
+<StatusPageLayout
+	pageName={page.name}
+	statusIndicator={statusIndicator}
+	statusDescription={page.statusDescription}
+	subscribeUrl="/subscribe"
+>
+	<!-- Placeholder content - will be replaced by DT-025 (Component Status Display) -->
+	<section class="space-y-6">
+		<!-- Current Status Summary Card -->
+		<div class="rounded-lg border border-border bg-card p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-foreground">
+				System Components
+			</h2>
+			<p class="text-muted-foreground">
+				Component status information will be displayed here.
+			</p>
+		</div>
+
+		<!-- Active Incidents Section - Placeholder for DT-026 -->
+		<div class="rounded-lg border border-border bg-card p-6 shadow-sm">
+			<h2 class="mb-4 text-lg font-semibold text-foreground">
+				Active Incidents
+			</h2>
+			<p class="text-muted-foreground">
+				No active incidents reported.
+			</p>
+		</div>
+
+		<!-- Past Incidents Section - Placeholder -->
+		<div class="space-y-4">
+			<h2 class="text-lg font-semibold text-foreground">
+				Past Incidents
+			</h2>
+			<p class="text-sm text-muted-foreground">
+				Incident history will be displayed here.
+			</p>
+		</div>
+	</section>
+</StatusPageLayout>

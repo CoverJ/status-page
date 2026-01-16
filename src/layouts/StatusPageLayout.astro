@@ -1,0 +1,173 @@
+---
+import "@/styles/global.css";
+import type { PageStatusIndicator } from "@/db/schema/constants";
+
+export interface Props {
+	/**
+	 * The name of the status page (e.g., company name)
+	 */
+	pageName: string;
+	/**
+	 * Optional logo URL. If not provided, shows the page name as text.
+	 */
+	logoUrl?: string;
+	/**
+	 * Current overall status indicator
+	 */
+	statusIndicator: PageStatusIndicator;
+	/**
+	 * Optional custom status description. If not provided, uses default text.
+	 */
+	statusDescription?: string | null;
+	/**
+	 * Subscribe URL for the footer link
+	 */
+	subscribeUrl?: string;
+}
+
+const {
+	pageName,
+	logoUrl,
+	statusIndicator,
+	statusDescription,
+	subscribeUrl = "/subscribe",
+} = Astro.props;
+
+/**
+ * Maps status indicator to display configuration
+ */
+const statusConfig: Record<PageStatusIndicator, { label: string; bgClass: string; textClass: string; dotClass: string }> = {
+	none: {
+		label: "All Systems Operational",
+		bgClass: "bg-emerald-500",
+		textClass: "text-white",
+		dotClass: "bg-emerald-400",
+	},
+	minor: {
+		label: "Minor System Issues",
+		bgClass: "bg-yellow-500",
+		textClass: "text-black",
+		dotClass: "bg-yellow-400",
+	},
+	major: {
+		label: "Major System Outage",
+		bgClass: "bg-orange-500",
+		textClass: "text-white",
+		dotClass: "bg-orange-400",
+	},
+	critical: {
+		label: "Critical System Outage",
+		bgClass: "bg-red-600",
+		textClass: "text-white",
+		dotClass: "bg-red-400",
+	},
+	maintenance: {
+		label: "Scheduled Maintenance",
+		bgClass: "bg-blue-500",
+		textClass: "text-white",
+		dotClass: "bg-blue-400",
+	},
+};
+
+const currentStatus = statusConfig[statusIndicator];
+const displayDescription = statusDescription ?? currentStatus.label;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={`${pageName} - System Status`} />
+		<title>{pageName} Status</title>
+
+		<!-- Preconnect for performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+
+		<!-- Cache control for static-first approach -->
+		<meta http-equiv="Cache-Control" content="public, max-age=60, stale-while-revalidate=300" />
+	</head>
+	<body class="min-h-screen bg-background text-foreground antialiased">
+		<div class="flex min-h-screen flex-col">
+			<!-- Header -->
+			<header class="border-b border-border bg-card">
+				<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+					<div class="flex items-center justify-center sm:justify-start">
+						{logoUrl ? (
+							<img
+								src={logoUrl}
+								alt={`${pageName} logo`}
+								class="h-8 w-auto sm:h-10"
+								loading="eager"
+							/>
+						) : (
+							<h1 class="text-xl font-semibold text-foreground sm:text-2xl">
+								{pageName}
+							</h1>
+						)}
+					</div>
+				</div>
+			</header>
+
+			<!-- Overall Status Banner -->
+			<div class={`${currentStatus.bgClass} ${currentStatus.textClass}`}>
+				<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+					<div class="flex items-center justify-center gap-3 sm:justify-start">
+						<!-- Animated status dot -->
+						<span class="relative flex h-3 w-3">
+							<span class={`absolute inline-flex h-full w-full animate-ping rounded-full ${currentStatus.dotClass} opacity-75`}></span>
+							<span class={`relative inline-flex h-3 w-3 rounded-full ${currentStatus.dotClass}`}></span>
+						</span>
+						<span class="text-lg font-medium sm:text-xl">
+							{displayDescription}
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main Content -->
+			<main class="flex-1">
+				<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+					<slot />
+				</div>
+			</main>
+
+			<!-- Footer -->
+			<footer class="border-t border-border bg-card">
+				<div class="mx-auto max-w-4xl px-4 py-6 sm:px-6 lg:px-8">
+					<div class="flex flex-col items-center justify-between gap-4 text-sm text-muted-foreground sm:flex-row">
+						<a
+							href={subscribeUrl}
+							class="inline-flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-4 w-4"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+							</svg>
+							Subscribe to Updates
+						</a>
+						<div class="flex items-center gap-1">
+							<span>Powered by</span>
+							<a
+								href="https://downtime.online"
+								class="text-primary hover:text-primary/80 transition-colors font-medium"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Downtime
+							</a>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
