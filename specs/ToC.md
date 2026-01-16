@@ -44,7 +44,7 @@
 
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
-| [DT-012](./DT-012_component_list_view.md) | Component List View | Display components grouped with status indicators and quick actions | |
+| [DT-012](./DT-012_component_list_view.md) | Component List View | Display components grouped with status indicators and quick actions | ✅ |
 | [DT-013](./DT-013_component_crud_operations.md) | Component CRUD Operations | Create, edit, and delete components with validation | |
 | [DT-014](./DT-014_component_group_management.md) | Component Group Management | Create and manage component groups for organization | |
 | [DT-015](./DT-015_component_drag_drop_reordering.md) | Component Drag-and-Drop Reordering | Reorder components and groups via drag-and-drop with @dnd-kit | |
