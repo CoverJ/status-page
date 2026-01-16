@@ -145,3 +145,47 @@ export async function destroySession(
 ): Promise<boolean> {
 	return SessionRepository.delete(db, sessionId);
 }
+
+/**
+ * Refresh threshold in days. Sessions will be refreshed if they expire
+ * within this many days.
+ */
+const REFRESH_THRESHOLD_DAYS = 15;
+
+/**
+ * Refreshes a session's expiry if it's within the refresh threshold.
+ * This implements session sliding - extending the session on user activity.
+ *
+ * @param db - Database connection
+ * @param session - The session to potentially refresh
+ * @param cookies - Astro cookies object to update the cookie expiry
+ * @param isSecure - Whether to set the Secure flag on the cookie
+ * @returns True if the session was refreshed, false otherwise
+ */
+export async function refreshSession(
+	db: Database,
+	session: Session,
+	cookies: AstroCookies,
+	isSecure = true,
+): Promise<boolean> {
+	const expiresAt = new Date(session.expiresAt);
+	const now = new Date();
+	const daysUntilExpiry =
+		(expiresAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24);
+
+	// Only refresh if within the threshold
+	if (daysUntilExpiry > REFRESH_THRESHOLD_DAYS) {
+		return false;
+	}
+
+	// Calculate new expiry
+	const newExpiry = getSessionExpiry();
+
+	// Update session in database
+	await SessionRepository.updateExpiry(db, session.sessionId, newExpiry);
+
+	// Update the cookie with the new expiry
+	setSessionCookie(cookies, session.sessionId, isSecure);
+
+	return true;
+}

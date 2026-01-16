@@ -5,4 +5,5 @@ export { IncidentUpdateRepository } from "./IncidentUpdateRepository";
 export { PageRepository } from "./PageRepository";
 export { SessionRepository } from "./SessionRepository";
 export { SubscriberRepository } from "./SubscriberRepository";
+export { TeamMemberRepository } from "./TeamMemberRepository";
 export { UserRepository } from "./UserRepository";
