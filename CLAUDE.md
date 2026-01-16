@@ -18,7 +18,7 @@
   1. Perform a `pnpm run lint:fix`
   2. Perform a `pnpm run test:all`
   3. Perform `pnpm build`
-  4. Perform `pnpm deploy`
+  4. Perform `pnpm run deploy`
   5. Create a git commit with a descriptive message. Have commit messages focus on the 'why' and 'what' with minimal 'how'
   <example>
     Fix race condition in user session handling
@@ -28,6 +28,7 @@
     simultaneously. Added mutex lock around session creation.
   </example>
   6. Perform a git push.
+  7. Update your ticket to the completed status in the /specs/ToC.md file.
 
   A work item is not considered finish until each of the above is completed successfully. If any of steps 1-4 fails, stop the wrap up process, address the issue, then start the process from the beginning.
 
