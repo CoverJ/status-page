@@ -10,6 +10,9 @@ export const prerender = false;
 
 import type { PageStatusIndicator } from "@/db/schema/constants";
 import StatusPageLayout from "@/layouts/StatusPageLayout.astro";
+import { createDb } from "@/db/client";
+import { ComponentRepository, ComponentGroupRepository } from "@/db/repositories";
+import { ComponentList, type GroupWithComponents, type ComponentWithUptime } from "@/components/status";
 
 // Get the subdomain route info from middleware
 const subdomainRoute = Astro.locals.subdomainRoute;
@@ -22,6 +25,30 @@ if (subdomainRoute.type !== "status-page") {
 
 const { page } = subdomainRoute;
 const statusIndicator = (page.statusIndicator || "none") as PageStatusIndicator;
+
+// Fetch components and groups from the database
+const db = createDb(Astro.locals.runtime.env.DB);
+const [components, groups] = await Promise.all([
+	ComponentRepository.findByPageId(db, page.pageId),
+	ComponentGroupRepository.findByPageId(db, page.pageId),
+]);
+
+// Add placeholder uptime for showcased components (MVP - real calculation in future)
+const componentsWithUptime: ComponentWithUptime[] = components.map((c) => ({
+	...c,
+	// Placeholder: 99.9% uptime for showcased components
+	// TODO: Calculate real uptime from incident history (DT-025 tech note)
+	uptimePercentage: c.showcase ? 99.9 : undefined,
+}));
+
+// Organize components by groups
+const groupsWithComponents: GroupWithComponents[] = groups.map((group) => ({
+	group,
+	components: componentsWithUptime.filter((c) => c.groupId === group.groupId),
+}));
+
+// Get ungrouped components (components with no group assigned)
+const ungroupedComponents = componentsWithUptime.filter((c) => !c.groupId);
 ---
 
 <StatusPageLayout
@@ -30,16 +57,17 @@ const statusIndicator = (page.statusIndicator || "none") as PageStatusIndicator;
 	statusDescription={page.statusDescription}
 	subscribeUrl="/subscribe"
 >
-	<!-- Placeholder content - will be replaced by DT-025 (Component Status Display) -->
 	<section class="space-y-6">
-		<!-- Current Status Summary Card -->
-		<div class="rounded-lg border border-border bg-card p-6 shadow-sm">
+		<!-- Component Status Section -->
+		<div>
 			<h2 class="mb-4 text-lg font-semibold text-foreground">
 				System Components
 			</h2>
-			<p class="text-muted-foreground">
-				Component status information will be displayed here.
-			</p>
+			<ComponentList
+				client:load
+				groups={groupsWithComponents}
+				ungroupedComponents={ungroupedComponents}
+			/>
 		</div>
 
 		<!-- Active Incidents Section - Placeholder for DT-026 -->
