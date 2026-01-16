@@ -23,7 +23,7 @@
 
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
-| [DT-005](./DT-005_password_authentication.md) | Password Authentication | PBKDF2 password hashing, login/signup endpoints, session management | |
+| [DT-005](./DT-005_password_authentication.md) | Password Authentication | PBKDF2 password hashing, login/signup endpoints, session management | ✅ |
 | [DT-006](./DT-006_magic_link_authentication.md) | Magic Link Authentication | Passwordless login via email with rate-limited, single-use tokens | |
 | [DT-007](./DT-007_auth_middleware_guards.md) | Auth Middleware & Guards | Route protection middleware and session validation | |
 
@@ -125,7 +125,7 @@
 
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
-| [DT-044](./DT-044_subdomain_routing.md) | Subdomain Routing | Route requests by subdomain with reserved subdomain handling | |
+| [DT-044](./DT-044_subdomain_routing.md) | Subdomain Routing | Route requests by subdomain with reserved subdomain handling | ✅ |
 | [DT-045](./DT-045_custom_domain_support.md) | Custom Domain Support (Basic) | Custom domain configuration with Cloudflare SSL | |
 
 ---
