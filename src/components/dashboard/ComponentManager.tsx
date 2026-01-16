@@ -1,15 +1,15 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import type { ComponentStatus } from "@/db/schema/constants";
 import {
-	ComponentList,
 	type ComponentData,
 	type ComponentGroupData,
+	ComponentList,
 } from "./ComponentList";
 import { CreateComponentModal } from "./CreateComponentModal";
-import { EditComponentModal } from "./EditComponentModal";
 import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
-import type { ComponentStatus } from "@/db/schema/constants";
+import { EditComponentModal } from "./EditComponentModal";
 
 export interface ComponentManagerProps {
 	/**
@@ -126,19 +126,22 @@ export function ComponentManager({
 	);
 
 	// Handle successful component deletion
-	const handleDeleteSuccess = useCallback((componentId: string) => {
-		const deletedComponent = components.find(
-			(c) => c.componentId === componentId,
-		);
-		setComponents((prev) =>
-			prev.filter((c) => c.componentId !== componentId),
-		);
-		toast.success("Component deleted", {
-			description: deletedComponent
-				? `${deletedComponent.name} has been removed.`
-				: "Component has been removed.",
-		});
-	}, [components]);
+	const handleDeleteSuccess = useCallback(
+		(componentId: string) => {
+			const deletedComponent = components.find(
+				(c) => c.componentId === componentId,
+			);
+			setComponents((prev) =>
+				prev.filter((c) => c.componentId !== componentId),
+			);
+			toast.success("Component deleted", {
+				description: deletedComponent
+					? `${deletedComponent.name} has been removed.`
+					: "Component has been removed.",
+			});
+		},
+		[components],
+	);
 
 	// Handle errors
 	const handleError = useCallback((message: string) => {

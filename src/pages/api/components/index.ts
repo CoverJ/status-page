@@ -1,8 +1,8 @@
 import type { APIContext } from "astro";
 import { createDb } from "../../../db/client";
 import {
-	ComponentRepository,
 	ComponentGroupRepository,
+	ComponentRepository,
 } from "../../../db/repositories";
 
 export const prerender = false;
