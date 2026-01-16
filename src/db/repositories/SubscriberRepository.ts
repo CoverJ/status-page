@@ -20,10 +20,7 @@ export const SubscriberRepository = {
 	},
 
 	async findByPageId(db: Database, pageId: string): Promise<Subscriber[]> {
-		return db
-			.select()
-			.from(subscribers)
-			.where(eq(subscribers.pageId, pageId));
+		return db.select().from(subscribers).where(eq(subscribers.pageId, pageId));
 	},
 
 	/**

@@ -17,10 +17,7 @@ export const UserRepository = {
 	},
 
 	async findByEmail(db: Database, email: string): Promise<User | undefined> {
-		const results = await db
-			.select()
-			.from(users)
-			.where(eq(users.email, email));
+		const results = await db.select().from(users).where(eq(users.email, email));
 		return results[0];
 	},
 

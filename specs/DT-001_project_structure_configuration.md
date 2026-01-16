@@ -33,3 +33,7 @@ Follow the "wrap it up" process:
 - DT-002: Database Schema - Core Entities
 - DT-003: Database Schema - Auth & Subscribers
 - DT-004: Database Repository Layer
+
+## Safe Guards
+* IMPORTANT!: Never use `rm -rf`
+* Only operate on files nested within the workspace. Never "traverse up" the file tree with mechanisms such as ".." e.g "rm ../../somefile.md"

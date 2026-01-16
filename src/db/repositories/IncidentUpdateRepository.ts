@@ -26,10 +26,7 @@ export const IncidentUpdateRepository = {
 			.orderBy(desc(incidentUpdates.displayAt));
 	},
 
-	async create(
-		db: Database,
-		data: NewIncidentUpdate,
-	): Promise<IncidentUpdate> {
+	async create(db: Database, data: NewIncidentUpdate): Promise<IncidentUpdate> {
 		const results = await db.insert(incidentUpdates).values(data).returning();
 		return results[0];
 	},

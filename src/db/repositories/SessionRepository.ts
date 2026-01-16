@@ -26,7 +26,9 @@ export const SessionRepository = {
 		const results = await db
 			.select()
 			.from(sessions)
-			.where(and(eq(sessions.sessionId, sessionId), gt(sessions.expiresAt, now)));
+			.where(
+				and(eq(sessions.sessionId, sessionId), gt(sessions.expiresAt, now)),
+			);
 		return results[0];
 	},
 
