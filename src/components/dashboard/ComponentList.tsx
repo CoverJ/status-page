@@ -7,8 +7,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import type { ComponentStatus } from "@/db/schema/constants";
+import { cn } from "@/lib/utils";
 
 /**
  * Component status configuration with display names and colors
@@ -101,6 +101,7 @@ function StatusIndicator({ status }: { status: ComponentStatus }) {
 	const config = STATUS_CONFIG[status];
 	return (
 		<span
+			role="img"
 			className={cn("inline-block h-2.5 w-2.5 rounded-full", config.color)}
 			aria-label={config.label}
 		/>
@@ -129,10 +130,7 @@ function StatusDropdown({
 				<Button
 					variant="ghost"
 					size="sm"
-					className={cn(
-						"h-7 gap-1.5 px-2 text-xs font-medium",
-						config.bgColor,
-					)}
+					className={cn("h-7 gap-1.5 px-2 text-xs font-medium", config.bgColor)}
 					disabled={disabled}
 				>
 					<StatusIndicator status={currentStatus} />
@@ -148,10 +146,7 @@ function StatusDropdown({
 						<DropdownMenuItem
 							key={status}
 							onClick={() => onStatusChange?.(componentId, status)}
-							className={cn(
-								"cursor-pointer gap-2",
-								isSelected && "bg-accent",
-							)}
+							className={cn("cursor-pointer gap-2", isSelected && "bg-accent")}
 						>
 							<StatusIndicator status={status} />
 							<span>{statusConfig.label}</span>
@@ -260,11 +255,7 @@ function ComponentGroupSection({
 /**
  * Empty state when no components exist
  */
-function EmptyState({
-	onAddComponent,
-}: {
-	onAddComponent?: () => void;
-}) {
+function EmptyState({ onAddComponent }: { onAddComponent?: () => void }) {
 	return (
 		<div className="rounded-lg border bg-card">
 			<div className="flex flex-col items-center justify-center py-16 text-center">
