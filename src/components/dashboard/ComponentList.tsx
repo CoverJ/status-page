@@ -1,10 +1,19 @@
-import { ChevronDown, FolderOpen, Plus, Server } from "lucide-react";
+import {
+	ChevronDown,
+	FolderOpen,
+	MoreHorizontal,
+	Pencil,
+	Plus,
+	Server,
+	Trash2,
+} from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { ComponentStatus } from "@/db/schema/constants";
@@ -89,6 +98,14 @@ export interface ComponentListProps {
 	 */
 	onAddGroup?: () => void;
 	/**
+	 * Callback when Edit is clicked on a component
+	 */
+	onEditComponent?: (component: ComponentData) => void;
+	/**
+	 * Callback when Delete is clicked on a component
+	 */
+	onDeleteComponent?: (component: ComponentData) => void;
+	/**
 	 * Whether status changes are currently being processed
 	 */
 	isUpdating?: boolean;
@@ -159,15 +176,67 @@ function StatusDropdown({
 }
 
 /**
+ * Actions dropdown for edit/delete
+ */
+function ComponentActions({
+	component,
+	onEdit,
+	onDelete,
+	disabled,
+}: {
+	component: ComponentData;
+	onEdit?: (component: ComponentData) => void;
+	onDelete?: (component: ComponentData) => void;
+	disabled?: boolean;
+}) {
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild>
+				<Button
+					variant="ghost"
+					size="sm"
+					className="h-8 w-8 p-0"
+					disabled={disabled}
+				>
+					<span className="sr-only">Open menu</span>
+					<MoreHorizontal className="h-4 w-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align="end">
+				<DropdownMenuItem
+					onClick={() => onEdit?.(component)}
+					className="cursor-pointer"
+				>
+					<Pencil className="h-4 w-4" />
+					Edit
+				</DropdownMenuItem>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem
+					onClick={() => onDelete?.(component)}
+					className="cursor-pointer text-destructive focus:text-destructive"
+				>
+					<Trash2 className="h-4 w-4" />
+					Delete
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
+}
+
+/**
  * Single component row
  */
 function ComponentRow({
 	component,
 	onStatusChange,
+	onEdit,
+	onDelete,
 	isUpdating,
 }: {
 	component: ComponentData;
 	onStatusChange?: (componentId: string, newStatus: ComponentStatus) => void;
+	onEdit?: (component: ComponentData) => void;
+	onDelete?: (component: ComponentData) => void;
 	isUpdating?: boolean;
 }) {
 	return (
@@ -183,12 +252,20 @@ function ComponentRow({
 					)}
 				</div>
 			</div>
-			<StatusDropdown
-				componentId={component.componentId}
-				currentStatus={component.status}
-				onStatusChange={onStatusChange}
-				disabled={isUpdating}
-			/>
+			<div className="flex items-center gap-2">
+				<StatusDropdown
+					componentId={component.componentId}
+					currentStatus={component.status}
+					onStatusChange={onStatusChange}
+					disabled={isUpdating}
+				/>
+				<ComponentActions
+					component={component}
+					onEdit={onEdit}
+					onDelete={onDelete}
+					disabled={isUpdating}
+				/>
+			</div>
 		</div>
 	);
 }
@@ -200,11 +277,15 @@ function ComponentGroupSection({
 	group,
 	components,
 	onStatusChange,
+	onEditComponent,
+	onDeleteComponent,
 	isUpdating,
 }: {
 	group: ComponentGroupData;
 	components: ComponentData[];
 	onStatusChange?: (componentId: string, newStatus: ComponentStatus) => void;
+	onEditComponent?: (component: ComponentData) => void;
+	onDeleteComponent?: (component: ComponentData) => void;
 	isUpdating?: boolean;
 }) {
 	const [isExpanded, setIsExpanded] = useState(true);
@@ -242,6 +323,8 @@ function ComponentGroupSection({
 								key={component.componentId}
 								component={component}
 								onStatusChange={onStatusChange}
+								onEdit={onEditComponent}
+								onDelete={onDeleteComponent}
 								isUpdating={isUpdating}
 							/>
 						))
@@ -286,6 +369,8 @@ export function ComponentList({
 	onStatusChange,
 	onAddComponent,
 	onAddGroup,
+	onEditComponent,
+	onDeleteComponent,
 	isUpdating,
 }: ComponentListProps) {
 	// Group components by their groupId
@@ -344,6 +429,8 @@ export function ComponentList({
 						group={group}
 						components={groupComponents}
 						onStatusChange={onStatusChange}
+						onEditComponent={onEditComponent}
+						onDeleteComponent={onDeleteComponent}
 						isUpdating={isUpdating}
 					/>
 				);
@@ -368,6 +455,8 @@ export function ComponentList({
 								key={component.componentId}
 								component={component}
 								onStatusChange={onStatusChange}
+								onEdit={onEditComponent}
+								onDelete={onDeleteComponent}
 								isUpdating={isUpdating}
 							/>
 						))}
