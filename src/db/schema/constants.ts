@@ -31,7 +31,10 @@ export const INCIDENT_STATUSES = [
 
 export const INCIDENT_IMPACTS = ["none", "minor", "major", "critical"] as const;
 
+export const TEAM_MEMBER_ROLES = ["owner", "admin", "member"] as const;
+
 export type PageStatusIndicator = (typeof PAGE_STATUS_INDICATORS)[number];
 export type ComponentStatus = (typeof COMPONENT_STATUSES)[number];
 export type IncidentStatus = (typeof INCIDENT_STATUSES)[number];
 export type IncidentImpact = (typeof INCIDENT_IMPACTS)[number];
+export type TeamMemberRole = (typeof TEAM_MEMBER_ROLES)[number];
