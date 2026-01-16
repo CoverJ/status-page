@@ -25,7 +25,7 @@
 |--------|-------|-------------|------|
 | [DT-005](./DT-005_password_authentication.md) | Password Authentication | PBKDF2 password hashing, login/signup endpoints, session management | ✅ |
 | [DT-006](./DT-006_magic_link_authentication.md) | Magic Link Authentication | Passwordless login via email with rate-limited, single-use tokens | |
-| [DT-007](./DT-007_auth_middleware_guards.md) | Auth Middleware & Guards | Route protection middleware and session validation | |
+| [DT-007](./DT-007_auth_middleware_guards.md) | Auth Middleware & Guards | Route protection middleware and session validation | ✅ |
 
 ---
 
@@ -77,7 +77,7 @@
 
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
-| [DT-024](./DT-024_status_page_layout_styling.md) | Status Page Layout & Styling | Public-facing status page layout with responsive design | |
+| [DT-024](./DT-024_status_page_layout_styling.md) | Status Page Layout & Styling | Public-facing status page layout with responsive design | ✅ |
 | [DT-025](./DT-025_component_status_display.md) | Component Status Display | Display component statuses with uptime percentages | |
 | [DT-026](./DT-026_active_incident_display.md) | Active Incident Display | Show current unresolved incidents with update timeline | |
 | [DT-027](./DT-027_scheduled_maintenance_display.md) | Scheduled Maintenance Display | Show upcoming and in-progress maintenance windows | |
