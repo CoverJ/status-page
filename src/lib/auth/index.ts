@@ -17,6 +17,18 @@ export {
 	generateUserId,
 	getSessionCookie,
 	getSessionExpiry,
+	refreshSession,
 	setSessionCookie,
 	validateSession,
 } from "./session";
+
+export {
+	type AuthContext,
+	type AuthResult,
+	forbiddenResponse,
+	getCurrentUser,
+	hasPageAccess,
+	hasPageRole,
+	refreshSessionOnActivity,
+	unauthorizedResponse,
+} from "./guards";

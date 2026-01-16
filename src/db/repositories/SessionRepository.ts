@@ -55,4 +55,20 @@ export const SessionRepository = {
 			.returning();
 		return results.length;
 	},
+
+	/**
+	 * Update a session's expiry date (for session sliding/refresh).
+	 */
+	async updateExpiry(
+		db: Database,
+		sessionId: string,
+		newExpiry: Date,
+	): Promise<Session | undefined> {
+		const results = await db
+			.update(sessions)
+			.set({ expiresAt: newExpiry.toISOString() })
+			.where(eq(sessions.sessionId, sessionId))
+			.returning();
+		return results[0];
+	},
 };

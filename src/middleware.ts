@@ -1,7 +1,12 @@
 import type { MiddlewareHandler } from "astro";
 import { createDb } from "./db/client";
 import { PageRepository } from "./db/repositories";
-import type { Page } from "./db/types";
+import type { Page, Session, User } from "./db/types";
+import {
+	getSessionCookie,
+	refreshSession,
+	validateSession,
+} from "./lib/auth";
 
 /**
  * Reserved subdomains that cannot be used for status pages.
@@ -115,7 +120,80 @@ async function resolveSubdomainRoute(
 }
 
 /**
- * Astro middleware for subdomain-based routing.
+ * Auth context for authenticated users.
+ */
+export interface AuthLocals {
+	user: User;
+	session: Session;
+}
+
+/**
+ * Public API routes that don't require authentication.
+ * These are auth-related endpoints that must be accessible to unauthenticated users.
+ */
+const PUBLIC_API_ROUTES = [
+	"/api/auth/login",
+	"/api/auth/logout",
+	"/api/auth/signup",
+	"/api/auth/magic-link",
+	"/api/auth/verify-magic-link",
+	"/api/auth/forgot-password",
+	"/api/auth/reset-password",
+] as const;
+
+/**
+ * Check if a path is a public API route.
+ */
+function isPublicApiRoute(pathname: string): boolean {
+	return PUBLIC_API_ROUTES.some((route) => pathname === route);
+}
+
+/**
+ * Check if a path is a protected dashboard route.
+ * Dashboard routes are under /dashboard/*
+ */
+function isDashboardRoute(pathname: string): boolean {
+	return pathname.startsWith("/dashboard");
+}
+
+/**
+ * Check if a path is a protected API route.
+ * API routes are under /api/* except for public auth endpoints.
+ */
+function isProtectedApiRoute(pathname: string): boolean {
+	return pathname.startsWith("/api/") && !isPublicApiRoute(pathname);
+}
+
+/**
+ * Create a 401 Unauthorized JSON response for API routes.
+ */
+function createUnauthorizedApiResponse(): Response {
+	return new Response(
+		JSON.stringify({
+			success: false,
+			error: "Unauthorized",
+			message: "Authentication required",
+		}),
+		{
+			status: 401,
+			headers: { "Content-Type": "application/json" },
+		},
+	);
+}
+
+/**
+ * Create a redirect response to the login page.
+ */
+function createLoginRedirect(returnUrl?: string): Response {
+	const loginUrl = returnUrl ? `/login?returnUrl=${encodeURIComponent(returnUrl)}` : "/login";
+	return new Response(null, {
+		status: 302,
+		headers: { Location: loginUrl },
+	});
+}
+
+/**
+ * Astro middleware for subdomain-based routing and authentication.
  *
  * Routing logic:
  * - Root domain (downtime.online): Marketing/landing page
@@ -123,11 +201,17 @@ async function resolveSubdomainRoute(
  * - api.downtime.online: API endpoints
  * - {subdomain}.downtime.online: Customer status page
  * - Unknown subdomains: 404 page
+ *
+ * Authentication:
+ * - Dashboard routes (/dashboard/*): Require auth, redirect to login if not authenticated
+ * - API routes (/api/*): Require auth (except public auth endpoints), return 401 if not authenticated
+ * - Session refresh: Extends session expiry on activity
  */
 export const onRequest: MiddlewareHandler = async (context, next) => {
-	const { request, locals } = context;
+	const { request, locals, cookies } = context;
 	const url = new URL(request.url);
 	const hostname = url.hostname;
+	const pathname = url.pathname;
 
 	// Get environment bindings from Cloudflare runtime
 	const env = locals.runtime.env;
@@ -147,6 +231,58 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
 				"Content-Type": "text/html",
 			},
 		});
+	}
+
+	// Check if this route requires authentication
+	const requiresAuth = isDashboardRoute(pathname) || isProtectedApiRoute(pathname);
+
+	if (requiresAuth) {
+		// Try to validate the session
+		const sessionId = getSessionCookie(cookies);
+
+		if (!sessionId) {
+			// No session cookie - not authenticated
+			if (isProtectedApiRoute(pathname)) {
+				return createUnauthorizedApiResponse();
+			}
+			return createLoginRedirect(pathname);
+		}
+
+		// Validate the session
+		const db = createDb(env.DB);
+		const sessionResult = await validateSession(db, sessionId);
+
+		if (!sessionResult) {
+			// Invalid or expired session
+			if (isProtectedApiRoute(pathname)) {
+				return createUnauthorizedApiResponse();
+			}
+			return createLoginRedirect(pathname);
+		}
+
+		// Session is valid - attach user and session to locals
+		locals.user = sessionResult.user;
+		locals.session = sessionResult.session;
+
+		// Refresh session on activity (extend expiry if within threshold)
+		const isProduction = env.ENVIRONMENT === "production";
+		await refreshSession(db, sessionResult.session, cookies, isProduction);
+	} else {
+		// For non-protected routes, still try to load user info if session exists
+		// This allows pages to show personalized content without requiring auth
+		const sessionId = getSessionCookie(cookies);
+		if (sessionId) {
+			const db = createDb(env.DB);
+			const sessionResult = await validateSession(db, sessionId);
+			if (sessionResult) {
+				locals.user = sessionResult.user;
+				locals.session = sessionResult.session;
+
+				// Also refresh session on non-protected routes
+				const isProduction = env.ENVIRONMENT === "production";
+				await refreshSession(db, sessionResult.session, cookies, isProduction);
+			}
+		}
 	}
 
 	// Continue to next middleware/page handler
