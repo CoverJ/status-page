@@ -3,7 +3,7 @@ import type {
 	ComponentData,
 	ComponentGroupData,
 } from "@/components/dashboard/ComponentList";
-import ComponentList from "@/components/dashboard/ComponentList";
+import ComponentManager from "@/components/dashboard/ComponentManager";
 import type { StatusPage, User } from "@/components/dashboard/DashboardSidebar";
 import DashboardLayout from "@/layouts/DashboardLayout.astro";
 
@@ -110,20 +110,12 @@ const mockComponents: ComponentData[] = [
 			</p>
 		</div>
 
-		<ComponentList
+		<ComponentManager
 			client:load
-			components={mockComponents}
+			initialComponents={mockComponents}
 			groups={mockGroups}
+			pageId={currentPage.id}
 		/>
 	</div>
 </DashboardLayout>
 
-<script>
-	// Handle component status changes
-	// This will be connected to actual API endpoints in DT-013
-	document.addEventListener('astro:page-load', () => {
-		// Future: Add event listeners for status change callbacks
-		// The ComponentList component will call onStatusChange which we can handle here
-		// to make API calls to update component status
-	});
-</script>
