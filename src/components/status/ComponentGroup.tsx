@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 import type { ComponentStatus } from "@/db/schema/constants";
+import { cn } from "@/lib/utils";
 import { ComponentItem, type ComponentWithUptime } from "./ComponentItem";
 
 export interface ComponentGroupProps {
@@ -72,7 +72,7 @@ export function ComponentGroup({
 				className={cn(
 					"w-full flex items-center justify-between px-4 py-3",
 					"hover:bg-muted/50 transition-colors",
-					"focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+					"focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
 				)}
 				aria-expanded={isExpanded}
 				aria-controls={`group-${name.replace(/\s+/g, "-").toLowerCase()}`}
@@ -82,7 +82,7 @@ export function ComponentGroup({
 					<span
 						className={cn(
 							"h-2.5 w-2.5 rounded-full shrink-0",
-							getStatusDotClass(groupStatus)
+							getStatusDotClass(groupStatus),
 						)}
 						aria-hidden="true"
 					/>
@@ -97,12 +97,13 @@ export function ComponentGroup({
 					xmlns="http://www.w3.org/2000/svg"
 					className={cn(
 						"h-5 w-5 text-muted-foreground transition-transform duration-200",
-						isExpanded && "rotate-180"
+						isExpanded && "rotate-180",
 					)}
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke="currentColor"
 					strokeWidth={2}
+					aria-hidden="true"
 				>
 					<path
 						strokeLinecap="round"
@@ -119,15 +120,12 @@ export function ComponentGroup({
 					"transition-all duration-200 ease-in-out",
 					isExpanded
 						? "max-h-[2000px] opacity-100"
-						: "max-h-0 opacity-0 overflow-hidden"
+						: "max-h-0 opacity-0 overflow-hidden",
 				)}
 			>
 				<div className="border-t border-border divide-y divide-border">
 					{components.map((component) => (
-						<ComponentItem
-							key={component.componentId}
-							component={component}
-						/>
+						<ComponentItem key={component.componentId} component={component} />
 					))}
 				</div>
 			</div>

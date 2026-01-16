@@ -8,11 +8,18 @@
  */
 export const prerender = false;
 
+import {
+	ComponentList,
+	type ComponentWithUptime,
+	type GroupWithComponents,
+} from "@/components/status";
+import { createDb } from "@/db/client";
+import {
+	ComponentGroupRepository,
+	ComponentRepository,
+} from "@/db/repositories";
 import type { PageStatusIndicator } from "@/db/schema/constants";
 import StatusPageLayout from "@/layouts/StatusPageLayout.astro";
-import { createDb } from "@/db/client";
-import { ComponentRepository, ComponentGroupRepository } from "@/db/repositories";
-import { ComponentList, type GroupWithComponents, type ComponentWithUptime } from "@/components/status";
 
 // Get the subdomain route info from middleware
 const subdomainRoute = Astro.locals.subdomainRoute;

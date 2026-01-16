@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import type { Component } from "@/db/types";
 import type { ComponentStatus } from "@/db/schema/constants";
+import type { Component } from "@/db/types";
+import { cn } from "@/lib/utils";
 
 /**
  * Component with optional uptime percentage for showcased components
@@ -67,26 +67,54 @@ export function ComponentItem({ component }: ComponentItemProps) {
 	const config = STATUS_CONFIG[status];
 
 	const hasDescription = Boolean(component.description);
-	const showUptime = component.showcase && component.uptimePercentage !== undefined;
+	const showUptime =
+		component.showcase && component.uptimePercentage !== undefined;
+
+	const handleClick = hasDescription
+		? () => setShowDescription(!showDescription)
+		: undefined;
+	const _handleKeyDown = hasDescription
+		? (e: React.KeyboardEvent) => {
+				if (e.key === "Enter" || e.key === " ") {
+					e.preventDefault();
+					setShowDescription(!showDescription);
+				}
+			}
+		: undefined;
 
 	return (
 		<div className="group">
-			<div
-				className={cn(
-					"flex items-center justify-between px-4 py-3",
-					hasDescription && "cursor-pointer hover:bg-muted/30 transition-colors"
-				)}
-				onClick={() => hasDescription && setShowDescription(!showDescription)}
-				onKeyDown={(e) => {
-					if (hasDescription && (e.key === "Enter" || e.key === " ")) {
-						e.preventDefault();
-						setShowDescription(!showDescription);
-					}
-				}}
-				role={hasDescription ? "button" : undefined}
-				tabIndex={hasDescription ? 0 : undefined}
-				aria-expanded={hasDescription ? showDescription : undefined}
-			>
+			{hasDescription ? (
+				<button
+					type="button"
+					className={cn(
+						"flex w-full items-center justify-between px-4 py-3 text-left",
+						"cursor-pointer hover:bg-muted/30 transition-colors",
+					)}
+					onClick={handleClick}
+					aria-expanded={showDescription}
+				>
+					{renderContent()}
+				</button>
+			) : (
+				<div className="flex items-center justify-between px-4 py-3">
+					{renderContent()}
+				</div>
+			)}
+			{/* Description panel */}
+			{hasDescription && showDescription && (
+				<div className="border-t border-border bg-muted/20 px-4 py-3">
+					<p className="text-sm text-muted-foreground">
+						{component.description}
+					</p>
+				</div>
+			)}
+		</div>
+	);
+
+	function renderContent() {
+		return (
+			<>
 				{/* Component name and info icon */}
 				<div className="flex items-center gap-2">
 					<span className="text-foreground">{component.name}</span>
@@ -95,12 +123,13 @@ export function ComponentItem({ component }: ComponentItemProps) {
 							xmlns="http://www.w3.org/2000/svg"
 							className={cn(
 								"h-4 w-4 text-muted-foreground transition-opacity",
-								"opacity-0 group-hover:opacity-100"
+								"opacity-0 group-hover:opacity-100",
 							)}
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
 							strokeWidth={2}
+							aria-hidden="true"
 						>
 							<path
 								strokeLinecap="round"
@@ -123,7 +152,10 @@ export function ComponentItem({ component }: ComponentItemProps) {
 					{/* Status indicator */}
 					<div className="flex items-center gap-2">
 						<span
-							className={cn("h-2.5 w-2.5 rounded-full shrink-0", config.dotClass)}
+							className={cn(
+								"h-2.5 w-2.5 rounded-full shrink-0",
+								config.dotClass,
+							)}
 							aria-hidden="true"
 						/>
 						<span className={cn("text-sm font-medium", config.textClass)}>
@@ -131,23 +163,7 @@ export function ComponentItem({ component }: ComponentItemProps) {
 						</span>
 					</div>
 				</div>
-			</div>
-
-			{/* Expandable description */}
-			{hasDescription && (
-				<div
-					className={cn(
-						"overflow-hidden transition-all duration-200 ease-in-out",
-						showDescription ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
-					)}
-				>
-					<div className="px-4 pb-3 pt-0">
-						<p className="text-sm text-muted-foreground bg-muted/30 rounded-md p-3">
-							{component.description}
-						</p>
-					</div>
-				</div>
-			)}
-		</div>
-	);
+			</>
+		);
+	}
 }

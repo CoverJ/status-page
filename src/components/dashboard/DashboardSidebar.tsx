@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
 	AlertTriangle,
 	Calendar,
@@ -10,10 +9,8 @@ import {
 	Server,
 	Settings,
 	Users,
-	X,
 } from "lucide-react";
-
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +21,15 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import {
-	Tooltip,
-	TooltipContent,
-	TooltipProvider,
-	TooltipTrigger,
-} from "@/components/ui/tooltip";
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+} from "@/components/ui/sheet";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 /**
  * Navigation items for the dashboard sidebar
@@ -113,9 +111,9 @@ function SidebarSkeleton() {
 		<div className="flex flex-col gap-2 p-4">
 			<div className="h-10 w-full animate-pulse rounded-md bg-muted" />
 			<div className="h-px w-full bg-border my-2" />
-			{Array.from({ length: 6 }).map((_, i) => (
+			{["nav1", "nav2", "nav3", "nav4", "nav5", "nav6"].map((id) => (
 				<div
-					key={`skeleton-${i}`}
+					key={id}
 					className="h-9 w-full animate-pulse rounded-md bg-muted"
 				/>
 			))}
@@ -254,7 +252,9 @@ function UserMenu({ user }: { user: User }) {
 					aria-label="User menu"
 				>
 					<Avatar className="h-8 w-8">
-						{user.avatarUrl && <AvatarImage src={user.avatarUrl} alt={user.name || user.email} />}
+						{user.avatarUrl && (
+							<AvatarImage src={user.avatarUrl} alt={user.name || user.email} />
+						)}
 						<AvatarFallback className="text-xs">{initials}</AvatarFallback>
 					</Avatar>
 					<div className="flex flex-col items-start text-left min-w-0 flex-1">

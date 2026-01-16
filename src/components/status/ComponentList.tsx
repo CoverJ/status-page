@@ -1,4 +1,4 @@
-import type { Component, ComponentGroup as ComponentGroupType } from "@/db/types";
+import type { ComponentGroup as ComponentGroupType } from "@/db/types";
 import { ComponentGroup } from "./ComponentGroup";
 import { ComponentItem, type ComponentWithUptime } from "./ComponentItem";
 
@@ -35,6 +35,7 @@ function EmptyState() {
 					viewBox="0 0 24 24"
 					stroke="currentColor"
 					strokeWidth={2}
+					aria-hidden="true"
 				>
 					<path
 						strokeLinecap="round"
@@ -92,7 +93,10 @@ export function ComponentList({
 					)}
 					<div className="divide-y divide-border">
 						{ungroupedComponents.map((component) => (
-							<ComponentItem key={component.componentId} component={component} />
+							<ComponentItem
+								key={component.componentId}
+								component={component}
+							/>
 						))}
 					</div>
 				</div>
