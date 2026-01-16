@@ -33,7 +33,7 @@
 
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
-| [DT-008](./DT-008_dashboard_layout_navigation.md) | Dashboard Layout & Navigation | Admin dashboard shell with sidebar navigation and responsive design | |
+| [DT-008](./DT-008_dashboard_layout_navigation.md) | Dashboard Layout & Navigation | Admin dashboard shell with sidebar navigation and responsive design | ✅ |
 | [DT-009](./DT-009_page_creation_flow.md) | Page Creation Flow | Create new status pages with subdomain validation | |
 | [DT-010](./DT-010_page_settings_management.md) | Page Settings Management | Configure page name, description, subdomain, and timezone | |
 | [DT-011](./DT-011_team_member_management.md) | Team Member Management | Invite and manage team members with role-based access | |
@@ -78,7 +78,7 @@
 | Ticket | Title | Description | Done |
 |--------|-------|-------------|------|
 | [DT-024](./DT-024_status_page_layout_styling.md) | Status Page Layout & Styling | Public-facing status page layout with responsive design | ✅ |
-| [DT-025](./DT-025_component_status_display.md) | Component Status Display | Display component statuses with uptime percentages | |
+| [DT-025](./DT-025_component_status_display.md) | Component Status Display | Display component statuses with uptime percentages | ✅ |
 | [DT-026](./DT-026_active_incident_display.md) | Active Incident Display | Show current unresolved incidents with update timeline | |
 | [DT-027](./DT-027_scheduled_maintenance_display.md) | Scheduled Maintenance Display | Show upcoming and in-progress maintenance windows | |
 | [DT-028](./DT-028_incident_history_page.md) | Incident History Page | Historical incidents with calendar/list views and filtering | |
