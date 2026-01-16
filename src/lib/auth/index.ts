@@ -4,19 +4,19 @@
 
 export {
 	hashPassword,
-	verifyPassword,
-	validatePasswordStrength,
 	type PasswordValidationResult,
+	validatePasswordStrength,
+	verifyPassword,
 } from "./password";
 
 export {
+	clearSessionCookie,
+	createSession,
+	destroySession,
 	generateSessionId,
 	generateUserId,
-	getSessionExpiry,
-	createSession,
-	setSessionCookie,
 	getSessionCookie,
-	clearSessionCookie,
+	getSessionExpiry,
+	setSessionCookie,
 	validateSession,
-	destroySession,
 } from "./session";

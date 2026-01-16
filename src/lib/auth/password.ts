@@ -149,7 +149,7 @@ export function validatePasswordStrength(
 		errors.push("Password must contain at least one digit");
 	}
 
-	if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) {
+	if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password)) {
 		errors.push("Password must contain at least one special character");
 	}
 

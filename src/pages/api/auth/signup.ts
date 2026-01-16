@@ -145,7 +145,8 @@ export async function POST(context: APIContext): Promise<Response> {
 		const session = await createSession(db, user.userId);
 
 		// Set session cookie
-		const isProduction = context.locals.runtime.env.ENVIRONMENT === "production";
+		const isProduction =
+			context.locals.runtime.env.ENVIRONMENT === "production";
 		setSessionCookie(context.cookies, session.sessionId, isProduction);
 
 		// Update last login time
