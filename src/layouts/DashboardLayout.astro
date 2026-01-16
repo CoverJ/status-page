@@ -1,0 +1,113 @@
+---
+import "@/styles/global.css";
+import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import type { StatusPage, User } from "@/components/dashboard/DashboardSidebar";
+
+export interface Props {
+	/**
+	 * Page title for the browser tab
+	 */
+	title: string;
+	/**
+	 * Current user information
+	 */
+	user: User;
+	/**
+	 * List of status pages the user has access to
+	 */
+	pages: StatusPage[];
+	/**
+	 * Currently selected page
+	 */
+	currentPage: StatusPage;
+	/**
+	 * Whether the dashboard is in a loading state
+	 */
+	isLoading?: boolean;
+}
+
+const { title, user, pages, currentPage, isLoading = false } = Astro.props;
+
+// Get the current path for nav highlighting
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>{title} | Downtime Dashboard</title>
+	</head>
+	<body class="min-h-screen bg-background text-foreground antialiased">
+		<!-- Sidebar (desktop + mobile) -->
+		<DashboardSidebar
+			client:load
+			currentPath={currentPath}
+			user={user}
+			pages={pages}
+			currentPage={currentPage}
+			isLoading={isLoading}
+		/>
+
+		<!-- Main Content Area -->
+		<div class="lg:pl-64">
+			<!-- Page Content -->
+			<main class="min-h-screen">
+				<div class="px-4 py-8 sm:px-6 lg:px-8">
+					<slot />
+				</div>
+			</main>
+		</div>
+
+		<!-- Loading overlay for page transitions -->
+		<div
+			id="page-loading"
+			class="fixed inset-0 z-50 hidden items-center justify-center bg-background/80 backdrop-blur-sm"
+		>
+			<div class="flex flex-col items-center gap-4">
+				<div class="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+				<p class="text-sm text-muted-foreground">Loading...</p>
+			</div>
+		</div>
+
+		<!-- Page transition loading script -->
+		<script>
+			// Show loading indicator during navigation
+			const loadingOverlay = document.getElementById('page-loading');
+
+			document.addEventListener('astro:before-preparation', () => {
+				if (loadingOverlay) {
+					loadingOverlay.classList.remove('hidden');
+					loadingOverlay.classList.add('flex');
+				}
+			});
+
+			document.addEventListener('astro:after-swap', () => {
+				if (loadingOverlay) {
+					loadingOverlay.classList.add('hidden');
+					loadingOverlay.classList.remove('flex');
+				}
+			});
+
+			// Also handle regular link clicks for non-View Transitions navigation
+			document.addEventListener('click', (e) => {
+				const target = e.target as HTMLElement;
+				const link = target.closest('a');
+
+				if (link && link.href && link.href.startsWith(window.location.origin + '/dashboard')) {
+					// Only show loading for dashboard internal links
+					if (!link.target && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+						if (loadingOverlay) {
+							loadingOverlay.classList.remove('hidden');
+							loadingOverlay.classList.add('flex');
+						}
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,128 @@
+---
+import DashboardLayout from "@/layouts/DashboardLayout.astro";
+import type { StatusPage, User } from "@/components/dashboard/DashboardSidebar";
+
+// Dashboard pages must be server-rendered for auth
+export const prerender = false;
+
+// TODO: Replace with actual auth/session data from DT-007
+const mockUser: User = {
+	id: "user_1",
+	email: "admin@example.com",
+	name: "Admin User",
+};
+
+const mockPages: StatusPage[] = [
+	{
+		id: "page_1",
+		name: "Acme Corp",
+		subdomain: "acme",
+	},
+	{
+		id: "page_2",
+		name: "Widget Inc",
+		subdomain: "widget",
+	},
+];
+
+const pageId = Astro.url.searchParams.get("page") || mockPages[0].id;
+const currentPage = mockPages.find((p) => p.id === pageId) || mockPages[0];
+---
+
+<DashboardLayout
+	title="Settings"
+	user={mockUser}
+	pages={mockPages}
+	currentPage={currentPage}
+>
+	<div class="space-y-8">
+		<div>
+			<h1 class="text-3xl font-bold tracking-tight">Page Settings</h1>
+			<p class="text-muted-foreground mt-2">
+				Configure your status page settings and appearance.
+			</p>
+		</div>
+
+		<div class="grid gap-6">
+			<!-- General Settings -->
+			<div class="rounded-lg border bg-card">
+				<div class="p-6">
+					<h2 class="text-lg font-semibold">General</h2>
+					<p class="text-sm text-muted-foreground">
+						Basic information about your status page
+					</p>
+				</div>
+				<div class="border-t p-6 space-y-4">
+					<div class="grid gap-2">
+						<label class="text-sm font-medium" for="page-name">Page Name</label>
+						<input
+							id="page-name"
+							type="text"
+							value={currentPage.name}
+							class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+							disabled
+						/>
+					</div>
+					<div class="grid gap-2">
+						<label class="text-sm font-medium" for="subdomain">Subdomain</label>
+						<div class="flex">
+							<input
+								id="subdomain"
+								type="text"
+								value={currentPage.subdomain}
+								class="flex h-10 w-full rounded-l-md border border-r-0 border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+								disabled
+							/>
+							<span
+								class="inline-flex items-center rounded-r-md border border-input bg-muted px-3 text-sm text-muted-foreground"
+							>
+								.downtime.online
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Appearance Settings -->
+			<div class="rounded-lg border bg-card">
+				<div class="p-6">
+					<h2 class="text-lg font-semibold">Appearance</h2>
+					<p class="text-sm text-muted-foreground">
+						Customize the look and feel of your status page
+					</p>
+				</div>
+				<div class="border-t p-6">
+					<p class="text-sm text-muted-foreground">
+						Appearance settings will be available in a future update.
+					</p>
+				</div>
+			</div>
+
+			<!-- Danger Zone -->
+			<div class="rounded-lg border border-destructive/50 bg-card">
+				<div class="p-6">
+					<h2 class="text-lg font-semibold text-destructive">Danger Zone</h2>
+					<p class="text-sm text-muted-foreground">
+						Irreversible and destructive actions
+					</p>
+				</div>
+				<div class="border-t border-destructive/50 p-6">
+					<div class="flex items-center justify-between">
+						<div>
+							<p class="font-medium">Delete Status Page</p>
+							<p class="text-sm text-muted-foreground">
+								Permanently delete this status page and all its data
+							</p>
+						</div>
+						<button
+							class="inline-flex items-center justify-center rounded-md bg-destructive px-4 py-2 text-sm font-medium text-white hover:bg-destructive/90"
+							disabled
+						>
+							Delete Page
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</DashboardLayout>
